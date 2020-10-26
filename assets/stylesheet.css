@@ -1,7 +1,6 @@
 body {
     font-size: 1.5rem; /* currently ems cause chrome bug misinterpreting rems on body element */
     line-height: 1.6;
-    margin: 10px;
     overflow: hidden;
     background: #1f2630;
     color: #7fafdf;
@@ -11,7 +10,7 @@ body {
 }
 
 #main-header h1 {
-    margin-left: 20px;
+    margin-left: 30px;
     font-size: 2.5rem;
     line-height: 1.35;
 }
@@ -35,9 +34,10 @@ body {
 }
 
 #main-row {
-    display: inline-flex;
+    display: flex;
     margin-top: 20px;
-    width: 100%;
+    margin-right: 20px;
+    margin-left: 10px;
     alignment: bottom;
 }
 
@@ -49,9 +49,25 @@ body {
     border: 1px solid #2cfec1;
 }
 
+#prediction-graph {
+    margin-top: 20px;
+    height: 70vh;
+    width: calc(50vw - 15px);
+    border: 1px solid #2cfec1;
+}
+
 #topleft-row {
     background-color: #252e3f;
     padding: 8px 0 8px 0;
+}
+
+#topright-row {
+    padding: 7px 0 7px 7px;
+    background-color: #252e3f;
+}
+
+#demo_h2 {
+    margin: 0;
 }
 
 .Select-value-label {
@@ -70,15 +86,38 @@ body {
     border: 1px solid #2cfec1;
 }
 
-#left-column {
-    margin-right: 10px;
-    width: 50%;
+#modal-button {
+    float: right;
+    background-color: transparent;
+    margin-right: 15px;
+    border-radius: 20px;
+    color: #7fafdf;
+    border: 1px solid #252e3f;
 }
 
-#right-column {
-    margin-left: 10px;
-    justify-content: space-between;
-    background: #252e3f;
+#modal-button:hover {
+    border: 1px solid #2cfec1;
+}
+
+.modal-open {
+    padding-right: 0 !important;
+}
+
+.modal-content {
+    background-color: #252e3f;
+}
+
+.modal-footer {
+    padding: 0;
+}
+
+#close {
+    background-color: #1f2630;
+    color: mediumaquamarine;
+}
+
+#left-column {
+    margin-right: 10px;
 }
 
 .modebar {

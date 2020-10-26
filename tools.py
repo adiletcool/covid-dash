@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 
 
 access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNrOWJqb2F4djBnMjEzbG50amg0dnJieG4ifQ.Zme1-Uzoi75IaFbieBDl3A"
+authors = 'Romanov Alexander, Gerasimov Stanislav, Reznichenko Sergey, Abiraev Adilet, Gulkin Alexey'.split(', ')
 
 colors = [[0, '#4DC9A8'],
           [0.00001, '#7DD8A8'],

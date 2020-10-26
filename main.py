@@ -1,5 +1,5 @@
 import dash
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_html_components as html
 import dash_core_components as dcc
 from back import MyData
@@ -31,7 +31,6 @@ param_ddItems = [a for i in params for a in
                   dbc.DropdownMenuItem(divider=True)]]
 
 fig = go.Figure(tools.get_mapbox(locations=df['location'], z=df[params_origin[0]]))
-
 fig.update_layout(
     autosize=True,
     clickmode='event+select',
@@ -49,8 +48,21 @@ app.layout = html.Div(
             children=[html.H1('Covid-19 Forecasting'),
                       dbc.Col([
                           html.H3('Information Management, BMN 177'),
-                          html.H4('Romanov A., Gerasimov. S. Reznichenko S., Abiraev A., Gulkin A.'),
-                      ]), ],
+                          dbc.Button("About", id="modal-button"),
+                          dbc.Modal(
+                              [
+                                  dbc.ModalHeader([html.Tr(i) for i in ['BMN-177', "Team members:"]]),
+                                  dbc.ModalBody([html.Tr(i) for i in tools.authors],
+                                                style={'font-size': 18}, ),
+                                  dbc.ModalFooter(
+                                      dbc.Button("Close", id="close", className="ml-auto")
+                                  ),
+                              ],
+                              id="modal",
+                              size="sm",
+                              style={'float': 'right', 'margin-right': 20}
+                          ),
+                      ])],
             justify='between',
         ),
         html.Div(
@@ -70,7 +82,8 @@ app.layout = html.Div(
                                     ), width=6),
                                     dbc.Col(dcc.Dropdown(
                                         id='country-dcc-dropdown',
-                                        options=[{'label': i, 'value': i} for i in my_countries],
+                                        options=[{'label': 'Sorted by total cases', 'value': '0', 'disabled': True}] +
+                                                [{'label': i, 'value': i} for i in my_countries],
                                         value='World',
                                         clearable=False,
                                         style={'background': 'transparent', 'color': '#7fafdf', 'font-size': 18},
@@ -82,7 +95,11 @@ app.layout = html.Div(
                         ], width=6),
                 dbc.Col(id='right-column',
                         children=[
-                            html.H2('Selected:', id='demo_h2'),
+                            dbc.Row(html.H2('Selected:', id='demo_h2'), id='topright-row'),
+                            # dbc.Row(dcc.Graph(id='prediction-graph')),
+                            dbc.Row(
+                                dcc.Loading(type='default',
+                                            children=[dcc.Graph(id='prediction-graph')])),
                         ], width=6),
             ],
         ),
@@ -90,12 +107,26 @@ app.layout = html.Div(
 )
 
 
-@app.callback(Output('demo_h2', 'children'),
-              [Input('my_map', 'selectedData')])
-def test1(value):
-    if value is not None:
-        return f'Selected: {value["points"][0]["location"]}'
-    return 'Selected: World'
+@app.callback([Output('demo_h2', 'children'),
+               Output('prediction-graph', 'figure')],
+              [Input('my_map', 'selectedData'),
+               Input('param-dcc-dropdown', 'value')])
+def get_prediction_graph(value, param):
+    param_column = param.lower().replace(' ', '_')
+    location = 'World' if value is None else value['points'][0]['location']
+    return [f'Prediction of {param.lower()} for {location}',
+            my_data.get_prediction_plot(location, param_column, 100)]
+
+
+@app.callback(
+    Output("modal", "is_open"),
+    [Input("modal-button", "n_clicks"), Input("close", "n_clicks")],
+    [State("modal", "is_open")],
+)
+def toggle_modal(n1, n2, is_open):
+    if n1 or n2:
+        return not is_open
+    return is_open
 
 
 @app.callback(Output('my_map', 'figure'),
@@ -139,4 +170,4 @@ def param_dropdown_clicked(param, country):
 
 app.scripts.config.serve_locally = True
 if __name__ == '__main__':
-    app.run_server(debug=False)
+    app.run_server(debug=True)
