@@ -12,6 +12,11 @@ last_data_url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/pub
 
 print(os.listdir('assets/'))
 
+try:
+    print(os.listdir('assets/data'))
+except:
+    pass
+
 _path = 'assets/data'
 yesterday_str = (datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d")
 _filename = f'covid-data-{yesterday_str}.csv'
