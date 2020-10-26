@@ -1,9 +1,6 @@
 import json
-import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 
-external_stylesheets = [  # 'https://codepen.io/chriddyp/pen/bWLwgP.css',
-    dbc.themes.BOOTSTRAP]
 
 access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNrOWJqb2F4djBnMjEzbG50amg0dnJieG4ifQ.Zme1-Uzoi75IaFbieBDl3A"
 

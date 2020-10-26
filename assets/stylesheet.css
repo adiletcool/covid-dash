@@ -10,20 +10,25 @@ body {
     align-items: center;
 }
 
-#main-header h4 {
+#main-header h1 {
     margin-left: 20px;
     font-size: 2.5rem;
     line-height: 1.35;
 }
 
-#main-header h2 {
+#info {
+    margin-right: 0;
+}
+
+#main-header h3 {
     margin-right: 20px;
     font-size: 1.5rem;
     text-align: right;
     line-height: 1.35;
 }
 
-#main-header h1 {
+#main-header h4 {
+    text-align: right;
     margin-right: 20px;
     font-size: 1rem;
     line-height: 1.35;
@@ -44,6 +49,27 @@ body {
     border: 1px solid #2cfec1;
 }
 
+#topleft-row {
+    background-color: #252e3f;
+    padding: 8px 0 8px 0;
+}
+
+.Select-value-label {
+    color: #7fafdf !important;
+}
+
+.Select-input > input {
+    color: #2cfec1;
+}
+
+.Select-menu-outer {
+    background-color: #1f2630;
+}
+
+.Select-control {
+    border: 1px solid #2cfec1;
+}
+
 #left-column {
     margin-right: 10px;
     width: 50%;
@@ -53,33 +79,6 @@ body {
     margin-left: 10px;
     justify-content: space-between;
     background: #252e3f;
-}
-
-#dropdowns-row {
-    background-color: #252e3f;
-    padding: 10px;
-}
-
-#param-dropdown {
-    margin-right: 20px;
-}
-
-.dropdown-toggle {
-    background-color: #1f2630;
-    font-size: 20px;
-    color: #7fafdf;
-    border-color: #2cfec1;
-}
-
-.dropdown-toggle:hover {
-    color: #2cfec1;
-    border-color: #7fafdf;
-    background-color: transparent;
-}
-
-.dropdown-menu {
-    overflow-y: scroll;
-    height: 400px;
 }
 
 .modebar {
