@@ -41,6 +41,7 @@ body {
     vertical-align: center;
     height: 70vh;
     width: 100%;
+    border: 1px solid #2cfec1;
 }
 
 #left-column {
