@@ -9,9 +9,10 @@ columns = ['iso_code', 'date', 'location',
            'new_cases', 'total_cases', 'new_cases_per_million', 'total_cases_per_million',
            'new_deaths', 'total_deaths', 'new_deaths_per_million', 'total_deaths_per_million']
 last_data_url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'
-print(os.listdir())
-app_path = '/app/'
-_path = app_path + 'assets/data'
+
+print(os.listdir('assets/'))
+
+_path = 'assets/data'
 yesterday_str = (datetime.today() - timedelta(days=1)).strftime("%Y-%m-%d")
 _filename = f'covid-data-{yesterday_str}.csv'
 _csv_files = os.listdir(_path)
