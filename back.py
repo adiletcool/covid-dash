@@ -32,9 +32,12 @@ class MyData:
             self.df = pd.read_csv(f'{_path}/{_filename}')[columns].fillna(0)
         else:
             print('Downloading last data')
-            if len(_csv_files) > 0:
-                for i in _csv_files:
-                    os.remove(f'{_path}/{i}')
+            if len(_csv_files) == 1:
+                try:
+                    os.remove(f'{_path}/{_csv_files[0]}')
+                    print('Deletion succeed')
+                except:
+                    print('Deletion failed')
 
             self.df = pd.read_csv(last_data_url)[columns].fillna(0)
             self.df.to_csv(_path + '/' + _filename, index=False)
