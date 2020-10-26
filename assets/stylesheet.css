@@ -1,0 +1,86 @@
+body {
+    font-size: 1.5rem; /* currently ems cause chrome bug misinterpreting rems on body element */
+    line-height: 1.6;
+    margin: 10px;
+    overflow: hidden;
+    background: #1f2630;
+    color: #7fafdf;
+    font-family: "Playfair Display", serif;
+    font-weight: 300;
+    align-items: center;
+}
+
+#main-header h4 {
+    margin-left: 20px;
+    font-size: 2.5rem;
+    line-height: 1.35;
+}
+
+#main-header h2 {
+    margin-right: 20px;
+    font-size: 1.5rem;
+    text-align: right;
+    line-height: 1.35;
+}
+
+#main-header h1 {
+    margin-right: 20px;
+    font-size: 1rem;
+    line-height: 1.35;
+}
+
+#main-row {
+    display: inline-flex;
+    margin-top: 20px;
+    width: 100%;
+    alignment: bottom;
+}
+
+#my_map {
+    margin: 20px 0 0 0;
+    vertical-align: center;
+    height: 70vh;
+    width: 100%;
+}
+
+#left-column {
+    margin-right: 10px;
+    width: 50%;
+}
+
+#right-column {
+    margin-left: 10px;
+    justify-content: space-between;
+    background: #252e3f;
+}
+
+#dropdowns-row {
+    background-color: #252e3f;
+    padding: 10px;
+}
+
+#param-dropdown {
+    margin-right: 20px;
+}
+
+.dropdown-toggle {
+    background-color: #1f2630;
+    font-size: 20px;
+    color: #7fafdf;
+    border-color: #2cfec1;
+}
+
+.dropdown-toggle:hover {
+    color: #2cfec1;
+    border-color: #7fafdf;
+    background-color: transparent;
+}
+
+.dropdown-menu {
+    overflow-y: scroll;
+    height: 400px;
+}
+
+.modebar {
+    display: none !important;
+}
