@@ -75,10 +75,10 @@ class MyData:
         fig.add_trace(go.Scatter(x=res['real']['date'].to_list(), y=res['real'][indicator].to_list(), name='Real'))
         # Lower confidence interval
         fig.add_trace(go.Scatter(x=res['fc_index'], y=res['lower'].to_list(), showlegend=False, mode='lines',
-                                 line=dict(width=.5, color='#9cc3c3')))
+                                 line=dict(width=.5, color='#9cc3c3'), hoverinfo='none'))
         # Upper confidence interval
         fig.add_trace(go.Scatter(x=res['fc_index'], y=res['upper'].to_list(), mode='lines', showlegend=False,
-                                 fill='tonexty', line=dict(width=.5, color='#9cc3c3')))
+                                 fill='tonexty', line=dict(width=.5, color='#9cc3c3'), hoverinfo='none'))
         # Prediction
         fig.add_trace(go.Scatter(x=res['fc_index'], y=res['forecast'].to_list(), name='Prediction',
                                  line=dict(width=1.5, color='#2be4b1')))
