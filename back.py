@@ -27,8 +27,8 @@ class MyData:
             self.df.to_csv(_path + '/' + _filename, index=False)
             print('Downloaded last data')
 
-    def get_countries(self, ) -> list:
-        return self.df.groupby(by='location').max().sort_values('total_cases', ascending=False).index.to_list()
+    def get_countries(self, sort_by='new_cases') -> list:
+        return self.df.groupby(by='location').last().sort_values(sort_by, ascending=False).index.to_list()
 
     def get_last(self):
         return pd.concat([self.df[self.df['location'] == i].tail(1) for i in self.get_countries()])

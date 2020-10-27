@@ -23,13 +23,6 @@ params_origin = ['new_cases', 'new_deaths', 'total_cases', 'total_deaths',
 params = [i.capitalize().replace('_', ' ') for i in params_origin]
 my_countries = my_data.get_countries()
 
-country_ddItems = [dbc.DropdownMenuItem('Sorted by total cases', header=True)] + \
-                  [a for i in my_countries for a in [dbc.DropdownMenuItem(i, id=f'country_{i}'),
-                                                     dbc.DropdownMenuItem(divider=True)]]
-param_ddItems = [a for i in params for a in
-                 [dbc.DropdownMenuItem(i, id=f'param_{i}'),
-                  dbc.DropdownMenuItem(divider=True)]]
-
 map_fig = go.Figure(tools.get_mapbox(locations=df['location'], z=df[params_origin[0]]))
 tools.update_map_fig(map_fig)
 
@@ -77,8 +70,6 @@ app.layout = html.Div(
                                     ), width=6),
                                     dbc.Col(dcc.Dropdown(
                                         id='country-dcc-dropdown',
-                                        options=[{'label': 'Sorted by total cases', 'value': '0', 'disabled': True}] +
-                                                [{'label': i, 'value': i} for i in my_countries],
                                         value='World',
                                         clearable=False,
                                         style={'background': 'transparent', 'color': '#7fafdf', 'font-size': 18},
@@ -90,11 +81,12 @@ app.layout = html.Div(
                         ], width=6),
                 dbc.Col(id='right-column',
                         children=[
-                            dbc.Row(html.H2('Selected:', id='demo_h2'), id='topright-row'),
-                            # dbc.Row(dcc.Graph(id='prediction-graph')),
+                            dbc.Row(html.H2('Selected:', id='demo_h2'),id='topright-row'),
                             dbc.Row(
                                 dcc.Loading(type='default',
-                                            children=[dcc.Graph(id='prediction-graph')])),
+                                            children=[dcc.Graph(id='prediction-graph',
+                                                                config={'scrollZoom': True})]),
+                            ),
                         ], width=6),
             ],
         ),
@@ -102,16 +94,37 @@ app.layout = html.Div(
 )
 
 
-@app.callback([Output('demo_h2', 'children'),
-               Output('prediction-graph', 'figure')],
+@app.callback([Output('country-dcc-dropdown', 'options')],
+              [Input('param-dcc-dropdown', 'value')])
+def sort_countries(param):
+    param_column = param.lower().replace(' ', '_')
+    countries = my_data.get_countries(sort_by=param_column)
+
+    return [{'label': f'Sorted by {param}', 'value': '0', 'disabled': True}] + \
+           [{'label': i, 'value': i} for i in countries],
+
+
+@app.callback(Output('demo_h2', 'children'),
+              [Input('my_map', 'selectedData'),
+               Input('param-dcc-dropdown', 'value')])
+def get_country_title(value, param):
+    location = 'World' if value is None else value['points'][0]['location']
+    return f'Prediction of {param.lower()} for {location}',
+
+
+@app.callback(Output('prediction-graph', 'figure'),
               [Input('my_map', 'selectedData'),
                Input('param-dcc-dropdown', 'value')])
 def get_prediction_graph(value, param):
     param_column = param.lower().replace(' ', '_')
     location = 'World' if value is None else value['points'][0]['location']
-    fig_result = world_pred_fig if location == 'World' else my_data.get_prediction_plot(location, param_column)
 
-    return [f'Prediction of {param.lower()} for {location}', fig_result]
+    if location == 'World' and param == 'New cases':
+        fig_result = world_pred_fig
+    else:
+        fig_result = my_data.get_prediction_plot(location, param_column)
+
+    return fig_result
 
 
 @app.callback(
@@ -147,8 +160,11 @@ def param_dropdown_clicked(param, country):
 
     elif prop_id == 'country-dcc-dropdown.value':
         if param in params and country in my_countries:
+            param_column = param.lower().replace(' ', '_')
             locations = df['location'] if country == 'World' else df[df['location'] == country]['location']
-            figure.add_trace(tools.get_mapbox(locations=locations, z=df[param.lower().replace(' ', '_')]))
+            z = df[param_column] if country == 'World' else df[df['location'] == country][param_column]
+            print(f'{z.tolist()}')
+            figure.add_trace(tools.get_mapbox(locations=locations, z=z))
         else:
             return map_fig  # do not change anything
 
