@@ -30,16 +30,11 @@ param_ddItems = [a for i in params for a in
                  [dbc.DropdownMenuItem(i, id=f'param_{i}'),
                   dbc.DropdownMenuItem(divider=True)]]
 
-fig = go.Figure(tools.get_mapbox(locations=df['location'], z=df[params_origin[0]]))
-fig.update_layout(
-    autosize=True,
-    clickmode='event+select',
-    margin={"r": 0, "t": 0, "l": 0, "b": 0},
-    mapbox_style='carto-positron',  # "mapbox://styles/plotlymapbox/cjvprkf3t1kns1cqjxuxmwixz",
-    mapbox_accesstoken=tools.access_token,
-    mapbox_center={"lat": 90, "lon": 0},
-    mapbox_zoom=1,
-)
+map_fig = go.Figure(tools.get_mapbox(locations=df['location'], z=df[params_origin[0]]))
+tools.update_map_fig(map_fig)
+
+world_pred_fig = my_data.get_prediction_plot()
+tools.update_pred_fig(world_pred_fig)
 
 app.layout = html.Div(
     children=[
@@ -91,7 +86,7 @@ app.layout = html.Div(
                                 ],
                                 id='topleft-row'
                             ),
-                            dbc.Row((dcc.Graph(figure=fig, id='my_map')), id='graph-row'),
+                            dbc.Row((dcc.Graph(figure=map_fig, id='my_map')), id='graph-row'),
                         ], width=6),
                 dbc.Col(id='right-column',
                         children=[
@@ -114,8 +109,9 @@ app.layout = html.Div(
 def get_prediction_graph(value, param):
     param_column = param.lower().replace(' ', '_')
     location = 'World' if value is None else value['points'][0]['location']
-    return [f'Prediction of {param.lower()} for {location}',
-            my_data.get_prediction_plot(location, param_column, 100)]
+    fig_result = world_pred_fig if location == 'World' else my_data.get_prediction_plot(location, param_column)
+
+    return [f'Prediction of {param.lower()} for {location}', fig_result]
 
 
 @app.callback(
@@ -147,24 +143,16 @@ def param_dropdown_clicked(param, country):
             locations = df['location'] if country == 'World' else df[df['location'] == country]['location']
             figure.add_trace(tools.get_mapbox(locations=locations, z=df[param_column]))
         else:
-            return fig
+            return map_fig  # do not change anything
 
     elif prop_id == 'country-dcc-dropdown.value':
         if param in params and country in my_countries:
             locations = df['location'] if country == 'World' else df[df['location'] == country]['location']
             figure.add_trace(tools.get_mapbox(locations=locations, z=df[param.lower().replace(' ', '_')]))
         else:
-            return fig
+            return map_fig  # do not change anything
 
-    figure.update_layout(
-        autosize=True,
-        clickmode='event+select',
-        margin={"r": 0, "t": 0, "l": 0, "b": 0},
-        mapbox_style='carto-positron',  # "mapbox://styles/plotlymapbox/cjvprkf3t1kns1cqjxuxmwixz",
-        mapbox_accesstoken=tools.access_token,
-        mapbox_center=mapbox_center,
-        mapbox_zoom=mapbox_zoom,
-    )
+    tools.update_map_fig(figure, center=mapbox_center, zoom=mapbox_zoom)
     return figure
 
 

@@ -1,8 +1,6 @@
 import json
 import plotly.graph_objects as go
 
-
-access_token = "pk.eyJ1IjoicGxvdGx5bWFwYm94IiwiYSI6ImNrOWJqb2F4djBnMjEzbG50amg0dnJieG4ifQ.Zme1-Uzoi75IaFbieBDl3A"
 authors = 'Romanov Alexander, Gerasimov Stanislav, Reznichenko Sergey, Abiraev Adilet, Gulkin Alexey'.split(', ')
 
 colors = [[0, '#4DC9A8'],
@@ -31,6 +29,35 @@ def get_mapbox(locations, z):
         z=z, colorscale=colors,
         featureidkey="properties.admin", showscale=False,
         marker={'opacity': 0.7, 'line': {'width': .1, 'color': '#252e3f'}}
+    )
+
+
+def update_pred_fig(fig):
+    return fig.update_layout(
+        dragmode='pan',
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+        legend={'x': 0, 'y': 1, 'bgcolor': 'rgba(0,0,0,0)',
+                'font': {'size': 17, 'family': "Playfair Display", 'color': '#7fafdf'}},
+        plot_bgcolor='#252e3f',
+        paper_bgcolor='#252e3f',
+        xaxis={'color': '#7fafdf', 'gridcolor': '#3b4e72', 'showline': False,
+               'rangemode': "nonnegative", 'zeroline': False},
+        yaxis={'color': '#7fafdf', 'gridcolor': '#3b4e72', 'showline': False,
+               'rangemode': "nonnegative", 'zeroline': False},
+    )
+
+
+def update_map_fig(fig, center=None, zoom=1):
+    if center is None:
+        center = {"lat": 90, "lon": 0}
+
+    return fig.update_layout(
+        autosize=True,
+        clickmode='event+select',
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+        mapbox_style='carto-positron',
+        mapbox_center=center,
+        mapbox_zoom=zoom,
     )
 
 
